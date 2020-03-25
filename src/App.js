@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Dropdown from "react-dropdown";
 import parse from "html-react-parser";
-
+import {fetchShow} from "./api/fetchShow";
 import { formatSeasons } from "./utils/formatSeasons";
 
 import Episodes from "./components/Episodes";
@@ -14,19 +14,30 @@ export default function App() {
   const [selectedSeason, setSelectedSeason] = useState("");
   const episodes = seasons[selectedSeason] || [];
 
-  useEffect(() => {
-    const fetchShow = () => {
-      axios
-        .get(
-          "https://api.tvmaze.com/singlesearch/shows?q=stranger-things&embed=episodes"
-        )
+  // useEffect(() => {
+  //   const fetchShow = () => {
+  //     axios
+  //       .get(
+  //         "https://api.tvmaze.com/singlesearch/shows?q=stranger-things&embed=episodes"
+  //       )
+  //       .then(res => {
+  //         console.log('stranger things', res.data)
+  //         setShow(res.data);
+  //         setSeasons(formatSeasons(res.data._embedded.episodes));
+  //       });
+  //   };
+  //   fetchShow();
+  // }, []);
+
+    // App.js
+    useEffect(() => {
+      fetchShow()
         .then(res => {
+          // set state with the data
           setShow(res.data);
-          setSeasons(formatSeasons(res.data._embedded.episodes));
-        });
-    };
-    fetchShow();
-  }, []);
+          setSeasons(formatSeasons(res.data._embedded.episodes))
+        })
+    }, []);
 
   const handleSelect = e => {
     setSelectedSeason(e.value);
